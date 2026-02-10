@@ -3,6 +3,7 @@
 [ext_resource type="PackedScene" uid="uid://lefst4kd7jx2" path="res://scenes/player.tscn" id="1_uwrxv"]
 [ext_resource type="Texture2D" uid="uid://gea6r26khb38" path="res://assets/sprites/world_tileset.png" id="1_yqjtg"]
 [ext_resource type="PackedScene" uid="uid://caimvoudrif2h" path="res://scenes/platform.tscn" id="3_lnu2h"]
+[ext_resource type="PackedScene" uid="uid://b6a06rilotsb2" path="res://scenes/coin.tscn" id="4_lbhrr"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_lnu2h"]
 texture = ExtResource("1_yqjtg")
@@ -184,7 +185,7 @@ tracks/0/keys = {
 
 [sub_resource type="Animation" id="Animation_lbhrr"]
 resource_name = "move"
-length = 3.0
+length = 2.0333333
 loop_mode = 2
 tracks/0/type = "value"
 tracks/0/imported = false
@@ -193,7 +194,7 @@ tracks/0/path = NodePath(".:position")
 tracks/0/interp = 2
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 3),
+"times": PackedFloat32Array(0, 2),
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
 "values": [Vector2(354, 37), Vector2(446, 37)]
@@ -213,7 +214,7 @@ tile_map_data = PackedByteArray("AAABAAIAAAAAAAAAAAAAAAIAAAAAAAAAAAD//wQAAAAAAAA
 tile_set = SubResource("TileSet_lbhrr")
 
 [node name="Player" parent="." unique_id=1546301289 instance=ExtResource("1_uwrxv")]
-position = Vector2(22, 28)
+position = Vector2(326, -1)
 
 [node name="Camera2D" type="Camera2D" parent="Player" unique_id=393273740]
 position = Vector2(0, -7)
@@ -229,3 +230,9 @@ position = Vector2(354, 37)
 [node name="AnimationPlayer" type="AnimationPlayer" parent="PlatformWithMovement" unique_id=1326068108]
 libraries/ = SubResource("AnimationLibrary_iywne")
 autoplay = &"move"
+
+[node name="Coin" parent="." unique_id=623227702 instance=ExtResource("4_lbhrr")]
+position = Vector2(87, -82)
+
+[node name="Coin2" parent="." unique_id=1711744074 instance=ExtResource("4_lbhrr")]
+position = Vector2(136, 50)
