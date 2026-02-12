@@ -1,7 +1,7 @@
 extends Area2D
 
 @onready var timer: Timer = $Timer
-var is_death_player = false
+var restarting = false
 
 # On body entedered signal callback function
 func _on_body_entered(body: Node2D) -> void:
@@ -10,9 +10,9 @@ func _on_body_entered(body: Node2D) -> void:
 	
 	# Check if body is the player
 	if body is CharacterBody2D and body.name == "Player":
-		is_death_player = await body.take_damage()
-		print(is_death_player)
-		if is_death_player:
+		await body.take_damage(1)
+		if body.is_death and not restarting:
+			restarting = true
 			Engine.time_scale = 0.5
 			timer.start()
 
@@ -20,4 +20,5 @@ func _on_body_entered(body: Node2D) -> void:
 func _on_timer_timeout() -> void:
 	Engine.time_scale = 1
 	print("Player has been killed!")
+	restarting = false
 	get_tree().reload_current_scene()

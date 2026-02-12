@@ -9,73 +9,81 @@ var is_hurt = false
 var is_death = false
 var hit_points = 3
 
+
+# MAIN PHYSIC PROCESS
 func _physics_process(delta: float) -> void:
-	# Add the gravity.
+	handle_gravity(delta)
+
+	# If is hurt or death, don't apply horizontal movement
+	if is_hurt or is_death:
+		velocity.x = 0
+	else:
+		handle_input()
+		handle_animations()
+	
+	move_and_slide()
+
+
+# HANDLE GRAVITY WHEN IN THE AIR
+func handle_gravity(delta:float) -> void:
 	if not is_on_floor():
 		velocity += get_gravity() * delta
 
-	# Action handling
-	if is_hurt or is_death:
-		# if hurt, set velocity to zero
-		velocity.x = 0
+
+# HANDLE INPUT EVENTS
+func handle_input() -> void:
+	var direction := Input.get_axis("move_left", "move_right")
+	
+	# Horizontal movement
+	if direction:
+		velocity.x = direction * SPEED
+		animated_sprite.flip_h = direction < 0
 	else:
-		# Handle jump
-		if Input.is_action_just_pressed("jump") and is_on_floor():
-			velocity.y = JUMP_VELOCITY
-		
-		# ----- MOVEMENT -----
-		# Get the input direction
-		var direction := Input.get_axis("move_left", "move_right")
-		
-		if direction:
-			velocity.x = direction * SPEED
+		velocity.x = move_toward(velocity.x, 0, SPEED)
+	
+	# Vertical Movement
+	if Input.is_action_just_pressed("jump") and is_on_floor():
+		velocity.y = JUMP_VELOCITY
+
+
+# HANDLE ANIMATION BY STATE
+func handle_animations() -> void:
+	if not is_on_floor():
+		if velocity.y < 0:
+			Utils.play_if_new(animated_sprite, "jump")
 		else:
-			velocity.x = move_toward(velocity.x, 0, SPEED)
-		# ----- MOVEMENT -----
-
-		# ----- ANIMATIONS -----
-		# Flip
-		if direction > 0:
-			animated_sprite.flip_h = false
-		elif direction < 0:
-			animated_sprite.flip_h = true
-		
-		if is_on_floor():
-			if direction != 0:
-				animated_sprite.play("run")
-			else:
-				animated_sprite.play("idle")
+			Utils.play_if_new(animated_sprite, "fall")
+	else:
+		if velocity.x != 0:
+			Utils.play_if_new(animated_sprite, "run")
 		else:
-			if velocity.y <= 0:
-				animated_sprite.play("jump")
-			else:
-				animated_sprite.play("fall")
-		# ----- ANIMATIONS -----
+			Utils.play_if_new(animated_sprite, "idle")
 
-	move_and_slide()
 
-# Take damage function
-func take_damage():
+# TAKE DAMAGE PROCESS
+func take_damage(damage_points:int) -> void:
 	# If it's hurting already, don't take damage
-	if is_hurt:
-		pass
+	if is_hurt or is_death:
+		return
 	
 	# Hurt process, when it's finished, return to normal state
-	is_hurt = true
-	hit_points -= 1
+	hit_points -= damage_points
+	print("HP: ", hit_points)
 	
-	# Check if player dies
-	print(hit_points)
+	# Player action depending on HP
 	if hit_points > 0:
-		animated_sprite.play("hurt")
-		await animated_sprite.animation_finished
+		hurt()
 	else:
-		animated_sprite.play("death")
-		is_death = true
-	
-	is_hurt = false
-	return is_death
+		death()
 
-# print animation name when it changes
-#func _on_animated_sprite_2d_animation_changed() -> void:
-	#print("Animation changed")
+# Hurt action
+func hurt():
+	is_hurt = true
+	await Utils.play_if_new(animated_sprite, "hurt", true)
+	is_hurt = false
+
+# Death action
+func death():
+	is_death = true
+	Utils.play_if_new(animated_sprite, "death")
+	

@@ -156,7 +156,7 @@ animations = [{
 }],
 "loop": true,
 "name": &"death",
-"speed": 2.0
+"speed": 4.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -276,7 +276,7 @@ animations = [{
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_fjrip"]
 radius = 5.0
-height = 14.0
+height = 10.0
 
 [node name="Player" type="CharacterBody2D" unique_id=1546301289]
 z_index = 5
@@ -286,13 +286,10 @@ script = ExtResource("1_g2els")
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=817815049]
 position = Vector2(0, -12)
 sprite_frames = SubResource("SpriteFrames_tuyoq")
-animation = &"hurt"
-autoplay = "idle"
-frame = 3
-frame_progress = 1.0
+animation = &"jump"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=977841419]
-position = Vector2(0, -7)
+position = Vector2(0, -5)
 shape = SubResource("CapsuleShape2D_fjrip")
 
 [connection signal="animation_changed" from="AnimatedSprite2D" to="." method="_on_animated_sprite_2d_animation_changed"]
