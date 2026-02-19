@@ -1,6 +1,7 @@
 extends Area2D
 
 @onready var timer: Timer = $Timer
+@export var damage_amount: int = 1
 var restarting = false
 
 # On body entedered signal callback function
@@ -10,7 +11,7 @@ func _on_body_entered(body: Node2D) -> void:
 	
 	# Check if body is the player
 	if body is CharacterBody2D and body.name == "Player":
-		await body.take_damage(1)
+		await body.take_damage(damage_amount)
 		if body.is_death and not restarting:
 			restarting = true
 			Engine.time_scale = 0.5
