@@ -1,5 +1,6 @@
 extends CharacterBody2D
 
+@onready var sfx: Node = $SFX
 
 const SPEED = 100.0
 const JUMP_VELOCITY = -300.0
@@ -44,7 +45,7 @@ func handle_input() -> void:
 	# Vertical Movement
 	if Input.is_action_just_pressed("jump") and is_on_floor():
 		velocity.y = JUMP_VELOCITY
-
+		sfx.get_node("Jump").play()
 
 # HANDLE ANIMATION BY STATE
 func handle_animations() -> void:
@@ -79,11 +80,13 @@ func take_damage(damage_points:int) -> void:
 # Hurt action
 func hurt():
 	is_hurt = true
+	sfx.get_node("Hurt").play()
 	await Utils.play_if_new(animated_sprite, "hurt", true)
 	is_hurt = false
 
 # Death action
 func death():
 	is_death = true
+	sfx.get_node("Death").play()
 	Utils.play_if_new(animated_sprite, "death")
 	

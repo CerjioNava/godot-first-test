@@ -2,6 +2,9 @@
 
 [ext_resource type="Texture2D" uid="uid://c1d2sy7hcp4s4" path="res://assets/sprites/knight.png" id="1_3vyb7"]
 [ext_resource type="Script" uid="uid://dth1rk1tfprfy" path="res://scripts/player.gd" id="1_g2els"]
+[ext_resource type="AudioStream" uid="uid://bh88bx2ej0rqn" path="res://assets/sounds/jump.wav" id="3_qhqgy"]
+[ext_resource type="AudioStream" uid="uid://cccsw55kol5wa" path="res://assets/sounds/hurt.wav" id="4_dqkch"]
+[ext_resource type="AudioStream" uid="uid://8xiedsk3aete" path="res://assets/sounds/explosion.wav" id="5_qlg0r"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_pf23h"]
 atlas = ExtResource("1_3vyb7")
@@ -291,5 +294,19 @@ animation = &"jump"
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=977841419]
 position = Vector2(0, -5)
 shape = SubResource("CapsuleShape2D_fjrip")
+
+[node name="SFX" type="Node" parent="." unique_id=1779347943]
+
+[node name="Jump" type="AudioStreamPlayer2D" parent="SFX" unique_id=31041186]
+stream = ExtResource("3_qhqgy")
+bus = &"SFX"
+
+[node name="Hurt" type="AudioStreamPlayer2D" parent="SFX" unique_id=267063706]
+stream = ExtResource("4_dqkch")
+bus = &"SFX"
+
+[node name="Death" type="AudioStreamPlayer2D" parent="SFX" unique_id=1628543506]
+stream = ExtResource("5_qlg0r")
+bus = &"SFX"
 
 [connection signal="animation_changed" from="AnimatedSprite2D" to="." method="_on_animated_sprite_2d_animation_changed"]
